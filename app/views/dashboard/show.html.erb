@@ -1,0 +1,94 @@
+<div class="Container">
+  <h1>Dashboard</h1>
+  <div>
+    <h5>Chapters read:</h5>
+  </div>
+  <div>
+    <b>- Total:</b> <%=@lifetime_count%>
+  </div>
+  <div>
+    <b>- <%=@year%>:</b> <%=@annual_count%>
+  </div>
+  <div>
+    <b>- This week:</b> <%=@count%>
+  </div>
+
+  <div class="Cards">
+
+    <div class="Card">
+      <canvas id="bible_percent" width="800" height="450"></canvas>
+       <button id="reset_bible" type="button" class="Button">Clear Bible Reading Progress</button>
+    </div>
+    <script>
+    new Chart(document.getElementById("bible_percent"), {
+        type: 'doughnut',
+        data: {
+          labels: ["Read", "Not Read"],
+          datasets: [
+            {
+              label: "Percentages",
+              backgroundColor: ["#3e95cd", "#8e5ea2"],
+              data: [<%= (100*@percentage_of_bible).round(2).to_json.html_safe%>,<%=(100-100*@percentage_of_bible).round(2).to_json.html_safe%>]
+            }
+          ]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'What percent of the bible have you read?'
+          },
+          legend: {
+            onClick: function (e) {
+            e.stopPropagation();
+            }
+          }
+        }
+    });
+    </script>
+
+    <div class="Card" id = "your_ranking">
+      <%= render partial: 'your_ranking' %>
+    </div>
+
+    <div class="Card" id = "book_percentages">
+    	<%= render partial: 'book_percentages' %>
+    </div>
+
+    <div class="Card" id = "book_repetitions">
+    	<%= render partial: "book_repetitions" %>
+    </div>
+
+    <div class="Card" id = "your_pace">
+      <%= render partial: "your_pace" %>
+    </div>
+    <div class="Card" style="text-align:center">
+      <div style="display:inline-block">
+        <%= simple_form_for @_, url: comparison_values_path, :method => :post, remote: true, html: {id: "random"} do |f| %>
+          <%= f.input :sender_ministry, collection: @all_groups, :label => "Group 1", selected: nil, as: :grouped_select, :group_method => :last, :group_label_method => :first, input_html: {id: "group1", :onchange=>'$(this.form).submit();'}, :selected => @group1 %>
+          <%= f.input :receiver_ministry, collection: @all_groups, :label => "Group 2", selected: nil, as: :grouped_select, :group_method => :last, :group_label_method => :first,input_html: {id: "group2", :onchange=>'$(this.form).submit();'}, :selected => @group2 %>
+            <% end %>
+        <script>
+          $(document).ready(function() { $("#group1").select2(); });
+          $(document).ready(function() { $("#group2").select2(); });
+        </script>
+
+        <div id="comparison_chart">
+          <%= render partial: 'comparison_chart' %>
+        </div>
+      </div>
+    </div>
+    <div class="Card" id="bible_by_book">
+      <%= render partial: 'bible_by_book' %>
+    </div>
+
+    <div class="Card" id="anonymous_ranking">
+      <%= render partial: 'anonymous_ranking' %>
+    </div>
+    <div class="Card" id="anonymous_ranking_month">
+      <%= render partial: 'anonymous_ranking_month' %>
+    </div>
+    <div class="Card" id="anonymous_ranking_week">
+      <%= render partial: 'anonymous_ranking_week' %>
+    </div>
+  </div>
+</div>

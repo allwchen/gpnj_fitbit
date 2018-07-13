@@ -1,0 +1,28 @@
+.LogReading {
+
+  table td {
+    width:100px;
+    height:100px;
+    text-align:center;
+    vertical-align:middle;
+    background-color:#ccc;
+    border:1px solid #fff;
+  }
+
+  table td.highlighted {
+    background-color:#949ce0;
+  }
+
+  table td.record {
+    background-color:#999;
+  }
+
+  table td.record.highlighted {
+    background-color:#6a77e8;
+  }
+  
+  .chapterNumber {
+    font-size: 35px;
+    font-weight: bold;
+  }
+}

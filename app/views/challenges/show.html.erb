@@ -1,0 +1,34 @@
+<div class="Challenge">
+  <div class="Challenge_left Container">
+
+    <h2>Current Challenges</h2>
+    <% if !@current_challenges.empty?%>
+      <div id ="current_challenge_table">
+      <%= render partial: 'current_challenge_table' %>
+      </div>
+    <% else %>
+      <p>You're currently not in any challenges.</p>
+      <%= link_to "Create a Challenge", create_challenge_path, class: "Button" %>
+    <% end %>
+
+    <% if !@old_challenges.empty? %>
+      <div>
+        <h2>Archived Challenges</h2>
+        <table class="Challenge_table">
+        	<% @old_challenges.each do |challenge| %>
+        		<tr> 
+        			<td><%= challenge.sender_ministry.name %></td>
+        			<td><%= challenge.receiver_ministry.name %></td>
+        			<td><%= challenge.winner ? challenge.sender_ministry.name : challenge.receiver_ministry.name %> Won</td>
+        		</tr>
+        	<% end %>
+        </table>
+      </div>
+    <% end %>
+  </div>
+  
+  <div id="challenge_requests" class="Challenge_right">
+    <%= render partial: 'challenge_requests' %>
+  </div>
+
+</div>

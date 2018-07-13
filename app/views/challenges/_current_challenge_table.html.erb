@@ -1,0 +1,92 @@
+<table class="Challenge_table">
+	<% @current_challenges.each_with_index do |challenge, index| %>
+		<tr>
+      <td>
+        <div class="trigger">
+          <% if !challenge.title.blank? %>
+            <h3><%= challenge.title %></h3>
+          <% end %>
+          <div class="Challenge_clusters">
+      			<div class="Challenge_cluster">
+              <div class="Challenge_teamName"><%= challenge.sender_ministry.name%></div>
+              <div class="Challenge_score"><%= @sender_scores[index]%></div>
+              <div class="Challenge_desc">chapters read on average</div>
+            </div>
+      			<div class="Challenge_cluster">
+              <div class="Challenge_teamName"><%= challenge.receiver_ministry.name %></div>
+              <div class="Challenge_score"><%=@receiver_scores[index]%></div>
+              <div class="Challenge_desc">chapters read on average</div>
+      		  </div>
+            <div>
+              <div>
+                <% if !challenge.valid_books.nil? && !challenge.valid_books.empty? %>
+                <b>Valid Books:&nbsp</b><%= challenge.valid_books.join(", ") %>
+                <% end %>
+             </div>
+             <div>
+               <b> Challenge Dates:&nbsp</b><%= challenge.start_time.strftime('%a %b %d %Y')%> - <%= (challenge.end_time-1).strftime('%a %b %d %Y')%>
+             </div>
+            </div>
+          </div>
+        </div>
+    		<div class="result">
+    			<canvas id="<%= "challengeChart" + challenge.id.to_s %>" width="800" height="400"></canvas>
+    		</div>
+      </td>
+    </tr>
+	<% end %>
+</table>
+<script>
+    $('div.trigger').on('click', function() { 
+       $(this).next('.result').fadeToggle(); 
+       $(this).next().next('.result').fadeToggle(); 
+    });
+<% @current_challenges.each do |challenge| %>
+
+new Chart(document.getElementById("<%= "challengeChart" + challenge.id.to_s%>").getContext('2d'), {
+  type: 'line',
+  data: {
+    labels: <%= @chart_labels[challenge]["x_labels"].to_json.html_safe %>,
+    datasets: [{ 
+        data: <%= @chart_labels[challenge]["y0_data"].to_json.html_safe %>,
+        label: <%= @chart_labels[challenge]["y0_name"].to_json.html_safe %>,
+        borderColor: "#3e95cd",
+        fill: false
+      }, { 
+        data: <%= @chart_labels[challenge]["y1_data"].to_json.html_safe %>,
+        label: <%= @chart_labels[challenge]["y1_name"].to_json.html_safe %>,
+        borderColor: "#8e5ea2",
+        fill: false
+      }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: <%= @chart_labels[challenge]["title"].to_json.html_safe %>
+    },
+    legend: {
+        onClick: function (e) {
+          e.stopPropagation();
+        }
+    },
+    scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero:true,
+            suggestedMin: 0,
+          },
+          scaleLabel: {
+          display: true,
+          labelString: 'Total Chapters Read to Date on Average per Person'
+      }
+        }]
+    },
+    elements: {
+      line: {
+        tension: 0,
+      }
+    }
+  }
+});
+<% end %>
+</script>

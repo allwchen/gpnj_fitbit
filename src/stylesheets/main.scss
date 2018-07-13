@@ -1,0 +1,112 @@
+$border-color: #eee;
+$border-radius: 3px;
+$margin: 20px;
+$padding: 20px;
+$transition: all .3s;
+
+$primary-color: #4D5382;
+
+* {
+	padding: 0;
+	margin: 0;
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 40px;
+  margin-bottom: $margin;
+}
+
+h2 {
+  font-size: 30px;
+  margin-bottom: $margin;
+}
+
+h3 {
+  font-size: 20px;
+  margin-bottom: $margin;
+}
+
+p {
+  margin-bottom: $margin;
+}
+
+.strong {
+  font-weight: 600;
+}
+
+.input {
+  margin-bottom: $margin;
+  width: 500px;
+  display: flex;
+
+  label {
+    width: 50%;
+    display: inline-block;
+    margin-right: $margin;
+  }
+
+  input,
+  select {
+    width: 50%;
+    height: 30px;
+    padding: 0 $padding / 3;
+  }
+
+  #books {
+    height: 300px;
+  }
+}
+
+select {
+    height: 30px;
+    padding: 0 $padding / 3;
+  }
+
+.select2 {
+  display: none;
+}
+
+.MobileNotice {
+  display: none;
+}
+
+@media (max-width:480px)  {
+
+  .app {
+    display: none;
+  }
+
+  .MobileNotice {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: $padding * 2;
+    height: 100vh;
+    width: 100%;
+    background: $primary-color;
+    color: white;
+    font-size: 15px;
+    margin-top: -75px;
+    line-height: 1.5; 
+
+    &_icon {
+      line-height: 1;
+      font-size: 150px;
+      margin-bottom: $margin / 2;
+    }
+  }
+}
+
+@import 'components/button';
+@import 'components/card';
+@import 'components/challenge';
+@import 'components/container';
+@import 'components/log-reading';
+@import 'components/nav';
+@import 'components/login';
+@import 'components/tooltip';

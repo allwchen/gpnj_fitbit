@@ -1,0 +1,42 @@
+
+<canvas id="comparisonChart" width="400" height="200"></canvas>
+
+<script>
+var comparisonChart = new Chart(document.getElementById("comparisonChart"), {
+    type: 'bar',
+    data: {
+      labels: [<%= @group1.to_json.html_safe %>, <%= @group2.to_json.html_safe %>],
+      datasets: [
+        {
+          label: <%= @group1.to_json.html_safe %>,
+          backgroundColor: "#191970",
+          data: [<%= @group1_average.round(2).to_json.html_safe %>]
+        }, {
+          label: <%= @group2.to_json.html_safe %>,
+          backgroundColor: "#191970",
+          data: [<%= @group2_average.round(2).to_json.html_safe %>]
+        }
+      ]
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: <%= @title_text.to_json.html_safe%>
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero:true,
+            suggestedMin: 0,
+            suggestedMax: <%=@y_axis_max%>
+          },
+          scaleLabel: {
+          display: true,
+          labelString: 'Average # of Ch. Read per Person in ' + <%=Time.current.year %>
+      }
+        }]
+      }
+    }
+});
+</script>

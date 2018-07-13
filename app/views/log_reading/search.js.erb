@@ -1,0 +1,23 @@
+$("#log_table").html("<%= escape_javascript(render partial: 'log_table', locals: { chapters: @chapter_num } ) %>");
+
+$(function () {
+  var isMouseDown = false,
+    isHighlighted;
+  $("#our_table td")
+    .mousedown(function () {
+      isMouseDown = true;
+      $(this).toggleClass("record");
+      isHighlighted = $(this).hasClass("record");
+      return false; // prevent text selection
+    })
+    .mouseover(function () {
+      if (isMouseDown) {
+        $(this).toggleClass("record", isHighlighted);
+      }
+    });
+
+  $(document)
+    .mouseup(function () {
+      isMouseDown = false;
+    });
+});

@@ -1,0 +1,35 @@
+<% if @last_read_date %>
+  <div>You last read this book on: <%= @last_read_date %></div>
+  <% else %>
+    <div>You haven't started progress on this book yet!</div>
+<% end %>
+<div>
+  <div> <%= @displayed_book %> </div>
+<table cellpadding="0" cellspacing="0" id="our_table">
+    <% (1..chapters).each_slice(5) do |row| %>
+    <tr>
+      <% row.each do |num| %>
+        <td class = "<%= @highlighted_chapters.include?(num) ? 'highlighted' : '' %>"> 
+          <div class = "chapterNumber"><%= num %></div>
+          <% if @num_read[num-1] != 0 %>
+            <div>(Read <%=@num_read[num-1]%>x)</div>
+            <%end%>
+        </td>
+      <% end %>
+    </tr>
+    <% end %>
+</table>
+</div>
+
+<div>
+  <input class="input" id="date_input" type="date" value="<%=Date.today%>">
+  <div style="display:flex; align-items: center;">
+    <button id="save_reading" type="button" class="Button">Save</button>
+    <% if @warning %>
+      <div style="margin-left: 20px; color: #D1495B;">
+        <i class="fa fa-exclamation-circle" style="margin-right: 7.5px;"></i><%= @warning %>
+      </div>
+    <% end %>
+  </div>
+
+</div>

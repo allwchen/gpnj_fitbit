@@ -1,0 +1,71 @@
+<select id = "book_dropdown2">
+  <% bible_books.each do |book| %>
+  <% if book == @last_book_read %>
+  	<option selected="selected"><%= book %></option>
+  <% else %>
+	<option><%= book %></option>
+  <% end %>
+  <% end %>
+</select>
+<canvas id="repetitions_chart" width="800"></canvas>
+<script>
+    $(document).ready(function() { $("#book_dropdown2").select2(); });
+	var initial_labels = <%= @initial_repetition_labels.to_json.html_safe %>;
+	var initial_data = <%= @book_repetitions[@last_book_read].to_json.html_safe %>;
+	var book_repetitions_chart = new Chart(document.getElementById("repetitions_chart"), {
+	    type: 'bar',
+	    data: {
+	      labels: initial_labels,
+	      datasets: [
+	        {
+	          label: "Number of times read",
+	          backgroundColor: ["#45B39D"],
+	          data: initial_data
+	        }
+	      ]
+	    },
+	    options: {
+	      legend: { display: false },
+	      title: {
+	        display: true,
+	        text: 'How many times have you read each chapter of ' + <%= @last_book_read.to_json.html_safe %>
+	      },
+	      scales: {
+			xAxes: [{
+		      id: 'x-axis-0',
+		      ticks: {
+		      	min: 0,
+		      	max: 10,
+		        beginAtZero:true,
+		        stepSize: 1
+	    		}
+		    }],
+		    yAxes: [{
+		    	scaleLabel: {
+	    		display: true,
+			      labelString: "Number of Reads"
+		    	},
+	    	 ticks: {
+		      	min: 0,
+		        beginAtZero:true,
+		        stepSize: 1,
+		        suggestedMax: <%=@y_axis_max%>
+	    		},
+		    }]
+	    }}
+	});
+	var book_repetitions = <%= @book_repetitions.to_json.html_safe %>;
+	$(document).on("change", "#book_dropdown2", function() {
+	  var dropdown = document.getElementById("book_dropdown2");
+	  var chosen_book = dropdown.options[dropdown.selectedIndex].text;
+	  book_repetitions_chart.data.datasets[0].data = book_repetitions[chosen_book];
+	  book_repetitions_chart.options.title.text = "How many times have you read each chapter of " + chosen_book;
+	  var labels = new Array(book_repetitions[chosen_book].length);
+	  labels[0] = chosen_book;
+	  for (i = 1; i < labels.length; i++) { 
+	    labels[i] = "Chapter" + i;
+	  }
+	  book_repetitions_chart.data.labels = labels;
+	  book_repetitions_chart.update();
+	 });
+</script>
